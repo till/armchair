@@ -9,7 +9,7 @@ $entry   = array('entry' => 'Great guestbook!', 'author' => 'Till');
 $docData = $armchair->addDocument($entry);
 
 // retrieve document
-$document = $armchair->getDocument($docData['id']);
+$document = $armchair->get($docData['id']);
 
 // delete document
 $armchair->deleteDocument($document['_id']);
