@@ -126,13 +126,10 @@ class ArmChair extends HTTP_Request2
         if (!isset($data['_rev'])) {
             return false;
         }
-        $rev = urlencode($data['_rev']);
-        $id  = urlencode($id);
+        $id = urlencode($id);
 
-        unset($data['_rev']);
-
-        $this->setUrl($this->server . '/' . $id . '?rev=' . $rev);
-        $this->setMethod(HTTP_Request2::METHOD_POST);
+        $this->setUrl($this->server . '/' . $id);
+        $this->setMethod(HTTP_Request2::METHOD_PUT);
         $this->setBody(json_encode($data));
 
         $response = $this->send();
