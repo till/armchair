@@ -46,10 +46,10 @@ class ArmChair extends HTTP_Request2
     public function get($id = null)
     {
         if ($id === null) {
-            $this->setUri($this->server . '/_all_docs');
+            $this->setUrl($this->server . '/_all_docs');
         } else {
             $id = urlencode($id);
-            $this->setUri($this->server . '/' . $id);
+            $this->setUrl($this->server . '/' . $id);
         }
         $this->setMethod(HTTP_Request2::METHOD_GET);
         $response = $this->send();
@@ -71,10 +71,10 @@ class ArmChair extends HTTP_Request2
         if (isset($data['_id'])) {
             $id = urlencode($data['_id']);
             unset($data['_id']);
-            $this->setUri($this->server . '/' . $id);
+            $this->setUrl($this->server . '/' . $id);
             $this->setMethod(HTTP_Request2::METHOD_PUT);
         } else {
-            $this->setUri($this->server);
+            $this->setUrl($this->server);
             $this->setMethod(HTTP_Request2::METHOD_POST);
         }
         $this->setBody(json_encode($data));
@@ -99,7 +99,7 @@ class ArmChair extends HTTP_Request2
         }
         $id  = urlencode($id);
         $rev = urlencode($rev);
-        $this->setUri($this->server . '/' . $id . '?rev=' . $rev);
+        $this->setUrl($this->server . '/' . $id . '?rev=' . $rev);
         $this->setMethod(HTTP_Request2::METHOD_DELETE);
 
         $response = $this->send();
@@ -120,8 +120,15 @@ class ArmChair extends HTTP_Request2
         if (empty($id)) {
             return false;
         }
-        $id = urlencode($id);
-        $this->setUri($this->server . '/' . $id);
+        if (!isset($data['_rev'])) {
+            return false;
+        }
+        $rev = urlencode($data['_rev']);
+        $id  = urlencode($id);
+
+        unset($data['_rev']);
+
+        $this->setUrl($this->server . '/' . $id . '?rev=' . $rev);
         $this->setMethod(HTTP_Request2::METHOD_POST);
         $this->setBody(json_encode($data));
 
