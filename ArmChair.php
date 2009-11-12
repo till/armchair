@@ -34,6 +34,9 @@ class ArmChair extends HTTP_Request2
     {
         $this->server = $server;
         parent::__construct($server);
+
+        // force this for all calls
+        $this->setHeader('Content-type: application/json; charset=utf-8');
     }
 
     /**
