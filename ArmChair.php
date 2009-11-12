@@ -86,18 +86,20 @@ class ArmChair extends HTTP_Request2
     /**
      * Delete a document by ID.
      *
-     * @param string $id The document's ID.
+     * @param string $id  The document's ID.
+     * @param string $rev The document's revision.
      *
      * @return mixed False if no ID was provided, otherwise an array.
      */
-    public function deleteDocument($id)
+    public function deleteDocument($id, $rev)
     {
         $id = trim($id);
         if (empty($id)) {
             return false;
         }
-        $id = urlencode($id);
-        $this->setUri($this->server . '/' . $id);
+        $id  = urlencode($id);
+        $rev = urlencode($rev);
+        $this->setUri($this->server . '/' . $id . '?rev=' . $rev);
         $this->setMethod(HTTP_Request2::METHOD_DELETE);
 
         $response = $this->send();
