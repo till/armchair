@@ -1,0 +1,3 @@
+[couchdb]
+server   = http://username:password@localhost:5984/
+database = test
