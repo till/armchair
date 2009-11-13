@@ -16,7 +16,12 @@ class ArmChairTestCase extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->config = parse_ini_file(dirname(__FILE__) . '/test.ini');
+        $this->config = @parse_ini_file(dirname(__FILE__) . '/test.ini');
+        if ($this->config === false) {
+            $this->markTestSkipped(
+                'This test requires a test.ini file.'
+            );
+        }
 
         $server = $this->config['server'] . $this->config['database'];
 
