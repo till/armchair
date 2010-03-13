@@ -60,6 +60,48 @@ class ArmChair extends HTTP_Request2
     }
 
     /**
+     * Fetch the results from a view
+     *
+     * Fetch the results from a view that exists in the
+     * database supplied in the constructor. 
+     *
+     * @param string $designDocument The design document to fetch
+     * @param string $name           The name of the view to fetch in
+     *                               the supplied design document.
+     * @param array  $extraParam     An array of http request parameters that
+     *                               could hold the likes of key, startkey,
+     *                               endkey, group, reduce, etc.
+     *
+     * @param const  $method         This is the HTTP Method type to place. In couchdb
+     *                               you can effectively place a POST with multiple keys
+     *                               to a view. However the standard (and default for this)
+     *                               method is a get. Pass the HTTP_Request2::METHOD_* constant
+     *                               as the parameter. HTTP_Request2::METHOD_GET or
+     *                               HTTP_Request::METHOD_POST.
+     *
+     * @return mixed boolean|Object  Either an object of the results from the view
+     *                               or simply a boolean false
+     */
+    public function getView($designDocument, $name = null,
+            $extraParams = array(), $method = HTTP_Request2::METHOD_GET)
+    {
+        $url = '/_design/' . urlencode($designDocument);
+        if (!is_null($name)) {
+            $url .= '/_view/' . urlencode($name);
+        }
+
+        if (!empty($extraParams)) {
+            $url .= '?' . http_build_query($extraParams);
+        }
+
+        $this->setUrl($this->server . $url);
+        $this->setMethod($method);
+
+        $response = $this->send();
+        return $this->parseResponse($response);
+    }
+
+    /**
      * Add a new document to the database.
      *
      * If the $data array contains an _id key, we PUT, otherwise CouchDB will take
