@@ -79,4 +79,25 @@ class ArmChairTestCase extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($response->ok);
     }
+
+    public function testGetView()
+    {
+        $_id  = 'view-' . time();
+        $data = array(
+            '_id'      => '_design/' . $_id,
+            'language' => 'javascript',
+            'views'    => array(
+                'count' => array(
+                   'map' =>  'function(doc){emit(1,1);}',
+                )
+            )
+        );
+
+        $document = $this->armchair->addDocument($data);
+        
+        // Fetch the view.
+        $response = $this->armchair->getView($_id, 'count');
+        
+        $this->assertTrue($response->ok);
+    }    
 }
